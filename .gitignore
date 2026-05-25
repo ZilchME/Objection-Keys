@@ -1,0 +1,10 @@
+# Build artifacts
+/objection-keys
+*.app
+
+# Dependency management
+vendor/
+
+# macOS
+.DS_Store
+*.dSYM
