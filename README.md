@@ -95,14 +95,14 @@ ffmpeg -i "confirm.mp3"   -c:a pcm_u8 -ar 22050 -ac 2 "number.wav" -y
 
 ## 按键映射
 
-| 按键                                                                                | 音效                                    |
-| --------------------------------------------------------------------------------- | ------------------------------------- |
-| a–z                                                                               | alphabet_fast.wav / alphabet_slow.wav |
-| 0–9, -, =, +, /, *, [, ], ;, ', ,, ., /, \, |, @, #, $, %, ^, &, !, ~, `, ", (, ) | number.wav                            |
-| 空格                                                                                | space.wav                             |
-| Enter / Return                                                                    | enter.wav                             |
-| Backspace / Delete                                                                | backspace.wav                         |
-| Escape                                                                            | esc.wav                               |
+| 按键                                    | 音效                                    |
+| ------------------------------------- | ------------------------------------- |
+| a–z                                   | alphabet_fast.wav / alphabet_slow.wav |
+| 0–9, -, =, +, /, *, (, ), &, ^, %, $, @, !, &#96;, ~, [, ], {, }, ;, ', \, \|, ,, <, >, ? | number.wav |
+| 空格                                   | space.wav                             |
+| Enter / Return                        | enter.wav                             |
+| Backspace / Delete                    | backspace.wav                         |
+| Escape                                | esc.wav                               |
 
 以下按键受支持但未映射音效，会被安静地忽略：
 
@@ -126,7 +126,7 @@ macOS 不允许应用自己给自己开辅助功能权限。
 不会。
 
 应用只监听按键事件用于播放音效，不保存、不上传、不分析你的输入内容。
-它只负责在旁边“哒哒哒”。
+它只负责在旁边"哒哒哒"。
 
 ## 鸣谢
 
