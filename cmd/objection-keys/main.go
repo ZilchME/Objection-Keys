@@ -6,73 +6,39 @@ import (
 	"flag"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
+	"path/filepath"
 
-	"objection-keys/internal/keyboard"
-	"objection-keys/internal/sound"
+	"objection-keys/internal/tray"
 )
 
 func main() {
 	log.SetFlags(0)
 	log.SetOutput(os.Stderr)
 
-	promptFlag := flag.Bool("prompt", false, "open system settings to grant accessibility permission")
+	soundsDir := flag.String("sounds", "", "path to sound effects directory")
 	flag.Parse()
 
-	// Check accessibility permission first
-	if !keyboard.HasAccessibilityPermission() {
-		if *promptFlag {
-			log.Println("Opening system settings for Accessibility permission...")
-			if keyboard.PromptAccessibility() {
-				log.Println("Permission granted! Restart the app.")
-			} else {
-				log.Println("Permission was not granted. Please grant it manually:")
-				log.Println("  System Settings → Privacy & Security → Accessibility")
-				log.Println("  Then click '+' and add this application")
-			}
-			os.Exit(1)
-		}
+	tray.Run(resolveSoundsDir(*soundsDir))
+}
 
-		log.Println("⚠️  Accessibility permission required for keyboard monitoring")
-		log.Println("")
-		log.Println("  Please grant permission manually:")
-		log.Println("  System Settings → Privacy & Security → Accessibility")
-		log.Println("  Then click '+' and add this application")
-		log.Println("")
-		log.Println("  Or run with --prompt to open system settings:")
-		log.Println("    ./objection-keys --prompt")
-		os.Exit(1)
+func resolveSoundsDir(flagValue string) string {
+	if flagValue != "" {
+		return flagValue
 	}
 
-	// Register all sound effects (also initializes the audio player)
-	sounds, err := sound.LoadAll("sounds")
+	if _, err := os.Stat("sounds"); err == nil {
+		return "sounds"
+	}
+
+	exe, err := os.Executable()
 	if err != nil {
-		log.Fatalf("Failed to load sounds: %v", err)
+		return "sounds"
 	}
-	defer sounds.Close()
 
-	// Start keyboard listener
-	kb, err := keyboard.New()
-	if err != nil {
-		log.Fatalf("Failed to start keyboard listener: %v", err)
+	resourcesSounds := filepath.Join(filepath.Dir(exe), "..", "Resources", "sounds")
+	if _, err := os.Stat(resourcesSounds); err == nil {
+		return resourcesSounds
 	}
-	defer kb.Close()
 
-	// Signal handling for graceful shutdown
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-
-	log.Println("⚖️ Listening to keyboard... (press Ctrl+C to exit)")
-
-	// Event loop
-	for {
-		select {
-		case keyName := <-kb.Keys():
-			sounds.Play(keyName)
-		case <-sigCh:
-			log.Println("\nShutting down...")
-			return
-		}
-	}
+	return "sounds"
 }

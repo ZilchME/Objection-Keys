@@ -99,12 +99,20 @@ func (sm *SoundMap) Play(keyName string) {
 
 func (sm *SoundMap) playAlphabet(keyName string) {
 	now := nowNano()
-	if sm.lastTime == 0 || (now-sm.lastTime) > (int64(fastAlphabetThresholdMs) * 1_000_000) {
+	if sm.lastTime == 0 || (now-sm.lastTime) > (int64(fastAlphabetThresholdMs)*1_000_000) {
 		sm.player.Play("alphabet_slow")
 	} else {
 		sm.player.Play("alphabet_fast")
 	}
 	sm.lastTime = now
+}
+
+func (sm *SoundMap) SetVolume(volume float64) {
+	sm.player.SetVolume(volume)
+}
+
+func (sm *SoundMap) Volume() float64 {
+	return sm.player.Volume()
 }
 
 // LoadAll loads all WAV files from the sounds directory and registers them.

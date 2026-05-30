@@ -20,6 +20,7 @@ type Player struct {
 	mu      sync.Mutex
 	sounds  map[string][]byte
 	players []*oto.Player
+	volume  float64
 }
 
 // NewPlayer creates a new audio player.
@@ -37,6 +38,7 @@ func NewPlayer() (*Player, error) {
 	return &Player{
 		ctx:    ctx,
 		sounds: make(map[string][]byte),
+		volume: 1,
 	}, nil
 }
 
@@ -159,8 +161,32 @@ func (p *Player) Play(name string) {
 	p.players = active
 
 	player := p.ctx.NewPlayer(bytes.NewReader(data))
+	player.SetVolume(p.volume)
 	player.Play()
 	p.players = append(p.players, player)
+}
+
+func (p *Player) SetVolume(volume float64) {
+	if volume < 0 {
+		volume = 0
+	}
+	if volume > 1 {
+		volume = 1
+	}
+
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	p.volume = volume
+	for _, player := range p.players {
+		player.SetVolume(volume)
+	}
+}
+
+func (p *Player) Volume() float64 {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.volume
 }
 
 // Close stops playback and releases all resources.

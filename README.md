@@ -35,6 +35,9 @@ go mod download
 
 # 构建
 make build
+
+# 构建 macOS 菜单栏应用
+make build-app
 ````
 
 或者手动构建：
@@ -76,7 +79,19 @@ cp -r sounds/ /任意位置/
 /path/to/objection-keys
 ```
 
-按 **Ctrl+C** 退出应用。
+直接运行二进制会启动菜单栏托盘图标：
+
+```bash
+./objection-keys
+```
+
+构建 `.app` 后可以从 Finder 打开 `Objection Keys.app`，或用命令启动：
+
+```bash
+open "Objection Keys.app"
+```
+
+托盘菜单支持暂停/恢复音效、检查辅助功能权限和退出应用。
 
 ## WAV 格式
 

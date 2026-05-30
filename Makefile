@@ -2,16 +2,25 @@
 
 MODULE := objection-keys
 BINARY := objection-keys
+APP := Objection Keys.app
 
-.PHONY: all build clean test help
+.PHONY: all build build-app clean test help
 
 ## build: Build the binary
 build:
 	CGO_ENABLED=1 go build -ldflags="-s -w" -o $(BINARY) ./cmd/objection-keys/
 
+## build-app: Build the macOS menu bar app bundle
+build-app: build
+	mkdir -p "$(APP)/Contents/MacOS" "$(APP)/Contents/Resources"
+	cp "$(BINARY)" "$(APP)/Contents/MacOS/$(BINARY)"
+	cp build/macos/Info.plist "$(APP)/Contents/Info.plist"
+	rm -rf "$(APP)/Contents/Resources/sounds"
+	cp -R sounds "$(APP)/Contents/Resources/sounds"
+
 ## clean: Remove build artifacts
 clean:
-	rm -f $(BINARY)
+	rm -rf $(BINARY) "$(APP)"
 
 ## test: Run tests
 test:
