@@ -1,4 +1,4 @@
-//go:build darwin
+//go:build darwin || windows
 
 package tray
 
@@ -22,8 +22,7 @@ func Run(soundsDir string) {
 }
 
 func (r *Runner) onReady() {
-	icon := iconBytes()
-	systray.SetTemplateIcon(icon, icon)
+	systray.SetTemplateIcon(templateIconBytes(), regularIconBytes())
 	systray.SetTitle("")
 	systray.SetTooltip("Objection Keys")
 

@@ -206,9 +206,6 @@ const (
 	_ = "skip"
 )
 
-// globalListener is the global Listener instance for C callbacks.
-var globalListener *Listener
-
 // Listener provides global keyboard event listening on macOS.
 type Listener struct {
 	ch   chan string

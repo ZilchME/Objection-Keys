@@ -1,5 +1,6 @@
 # Build artifacts
 /objection-keys
+/dist/
 *.app
 
 # Dependency management

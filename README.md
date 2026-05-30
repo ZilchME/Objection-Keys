@@ -38,6 +38,9 @@ make build
 
 # 构建 macOS 菜单栏应用
 make build-app
+
+# 交叉构建 Windows 托盘应用
+make build-windows
 ````
 
 或者手动构建：
@@ -92,6 +95,16 @@ open "Objection Keys.app"
 ```
 
 托盘菜单支持暂停/恢复音效、检查辅助功能权限和退出应用。
+
+### Windows
+
+Windows 构建产物位于 `dist/windows/`：
+
+```bash
+make build-windows
+```
+
+把整个 `dist/windows/` 目录复制到 Windows 后运行 `objection-keys.exe` 即可。程序会在系统托盘显示图标，并从同目录的 `sounds/` 读取音效。
 
 ## WAV 格式
 

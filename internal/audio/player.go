@@ -1,5 +1,3 @@
-//go:build darwin
-
 // Package audio provides WAV sound playback using ebitengine/oto.
 package audio
 

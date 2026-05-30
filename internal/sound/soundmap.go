@@ -1,5 +1,3 @@
-//go:build darwin
-
 // Package sound provides sound effect loading and playback mapping.
 package sound
 
